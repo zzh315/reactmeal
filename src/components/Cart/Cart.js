@@ -23,13 +23,20 @@ const Cart = (props) => {
             name={item.name}
             price={item.price}
             amount={item.amount}
-            onRemove={cartItemRemoveHandler}
-            onAdd={cartItemAddHandler}
+            onRemove={cartItemRemoveHandler.bind(null, item.id)}
+            onAdd={cartItemAddHandler.bind(null, item)}
           />
         );
       })}
     </ul>
   );
+  //bind(null, item.id) preconfig function for future excecution, allows to preconfigure argument
+  //when it's excecuted
+  // onRemove={cartItemRemoveHandler(item.id)} would call the function immediately
+  // we can either use bind (the first param is not used here, so we can write anything in this place) ...
+  // onRemove={cartItemRemoveHandler.bind(null, item.id)}
+  //  or we can create an anonymous function:
+  // onRemove={() => cartItemRemoveHandler(item.id)};  Both options are equivalent.
 
   return (
     <Modal onClick={props.onHideCart}>
