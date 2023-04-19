@@ -6,7 +6,7 @@ const CartContext = React.createContext({
   addItem: (item) => {},
   removeItem: (id) => {},
 });
-// //Setting defaults inside createContext()
+//Setting defaults inside createContext()
 // is recommended but not always required.
 // The defaults improves IDE intellisense (code hinting).
 export default CartContext;

@@ -7,8 +7,8 @@ const defaultCartState = {
 };
 
 const cartReducer = (state, action) => {
-  if (action.type == "ADD") {
-    const updatedItems = state.items.concat(action.item);
+  if (action.type === "ADD") {
+    const updatedItems = state.items.concat(action.item); // concat create a new array reference that does not affect old array. deep copy
     const updatedTotalAmount =
       state.totalAmount + action.item.amount * action.item.price;
     return { items: updatedItems, totalAmount: updatedTotalAmount };
