@@ -9,6 +9,7 @@ const Checkout = (props) => {
     onBlurHandler: nameOnBlurHandler,
     onChangeHandler: nameOnChangeHandler,
     hasError: nameHasError,
+    isInvalidInput: nameIsInvalid,
   } = useInput((input) => {
     return input.trim() === "";
   });
@@ -18,6 +19,7 @@ const Checkout = (props) => {
     onBlurHandler: emailOnBlurHandler,
     onChangeHandler: emailOnChangeHandler,
     hasError: emailHasError,
+    isInvalidInput: emailIsInvalid,
   } = useInput((input) => {
     return !input.includes("@");
   });
@@ -27,6 +29,7 @@ const Checkout = (props) => {
     onBlurHandler: cityOnBlurHandler,
     onChangeHandler: cityOnChangeHandler,
     hasError: cityHasError,
+    isInvalidInput: cityIsInvalid,
   } = useInput((input) => {
     return input.trim() === "";
   });
@@ -36,6 +39,7 @@ const Checkout = (props) => {
     onBlurHandler: postalOnBlurHandler,
     onChangeHandler: postalOnChangeHandler,
     hasError: postalHasError,
+    isInvalidInput: postalIsInvalid,
   } = useInput((input) => {
     return input.trim() === "";
   });
@@ -44,9 +48,17 @@ const Checkout = (props) => {
     onBlurHandler: streetOnBlurHandler,
     onChangeHandler: streetOnChangeHandler,
     hasError: streetHasError,
+    isInvalidInput: streetIsInvalid,
   } = useInput((input) => {
     return input.trim() === "";
   });
+
+  const formIsInvalid =
+    nameIsInvalid ||
+    emailIsInvalid ||
+    streetIsInvalid ||
+    cityIsInvalid ||
+    postalIsInvalid;
 
   const formSubmitHandler = (event) => {
     event.preventDefault();
@@ -56,7 +68,13 @@ const Checkout = (props) => {
 
   return (
     <form onSubmit={formSubmitHandler}>
-      <div className={classes.control}>
+      <div
+        className={
+          nameHasError
+            ? `${classes.control} ${classes.invalid}`
+            : `${classes.control}`
+        }
+      >
         <label htmlFor="name">Name</label>
         <input
           type="text"
@@ -65,9 +83,17 @@ const Checkout = (props) => {
           value={enteredName}
           onBlur={nameOnBlurHandler}
         />
-        {nameHasError && <p>please enter valid name</p>}
+        {nameHasError && (
+          <p className={classes.warning}>please enter valid name</p>
+        )}
       </div>
-      <div className={classes.control}>
+      <div
+        className={
+          emailHasError
+            ? `${classes.control} ${classes.invalid}`
+            : `${classes.control}`
+        }
+      >
         <label htmlFor="email">Email</label>
         <input
           type="text"
@@ -76,9 +102,17 @@ const Checkout = (props) => {
           value={enteredEmail}
           onBlur={emailOnBlurHandler}
         />
-        {emailHasError && <p>please enter valid email</p>}
+        {emailHasError && (
+          <p className={classes.warning}>please enter valid email</p>
+        )}
       </div>
-      <div className={classes.control}>
+      <div
+        className={
+          cityHasError
+            ? `${classes.control} ${classes.invalid}`
+            : `${classes.control}`
+        }
+      >
         <label htmlFor="city">City</label>
         <input
           type="text"
@@ -87,9 +121,17 @@ const Checkout = (props) => {
           value={enteredCity}
           onBlur={cityOnBlurHandler}
         />
-        {cityHasError && <p>please enter valid City</p>}
+        {cityHasError && (
+          <p className={classes.warning}>please enter valid City</p>
+        )}
       </div>
-      <div className={classes.control}>
+      <div
+        className={
+          streetHasError
+            ? `${classes.control} ${classes.invalid}`
+            : `${classes.control}`
+        }
+      >
         <label htmlFor="street">Street</label>
         <input
           type="text"
@@ -98,9 +140,17 @@ const Checkout = (props) => {
           value={enteredStreet}
           onBlur={streetOnBlurHandler}
         />
-        {streetHasError && <p>please enter valid Street</p>}
+        {streetHasError && (
+          <p className={classes.warning}>please enter valid Street</p>
+        )}
       </div>
-      <div className={classes.control}>
+      <div
+        className={
+          postalHasError
+            ? `${classes.control} ${classes.invalid}`
+            : `${classes.control}`
+        }
+      >
         <label htmlFor="city">Post Code</label>
         <input
           type="text"
@@ -109,13 +159,17 @@ const Checkout = (props) => {
           value={enteredPostal}
           onBlur={postalOnBlurHandler}
         />
-        {postalHasError && <p>please enter valid Post Code</p>}
+        {postalHasError && (
+          <p className={classes.warning}>please enter valid Post Code</p>
+        )}
       </div>
-      <div>
+      <div className={classes.actions}>
         <button type="button" onClick={props.onHideCheckout}>
-          Close
+          Cancle
         </button>
-        <button>Confirm</button>
+        <button className={classes.submit} disabled={formIsInvalid}>
+          Confirm
+        </button>
       </div>
     </form>
   );

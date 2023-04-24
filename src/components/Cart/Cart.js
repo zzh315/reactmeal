@@ -53,6 +53,19 @@ const Cart = (props) => {
   //  or we can create an anonymous function:
   // onRemove={() => cartItemRemoveHandler(item.id)};  Both options are equivalent.
 
+  const modalAction = (
+    <div className={classes.actions}>
+      <button onClick={props.onHideCart} className={classes["button--alt"]}>
+        Close
+      </button>
+      {hasItem && (
+        <button className={classes.button} onClick={showCheckoutHandler}>
+          Order
+        </button>
+      )}
+    </div>
+  );
+
   return (
     <Modal onClick={props.onHideCart}>
       {cartItems}
@@ -61,16 +74,7 @@ const Cart = (props) => {
         <span>{totalAmount}</span>
       </div>
       {checkoutIsShown && <Checkout onHideCheckout={hideCheckoutHandler} />}
-      <div className={classes.actions}>
-        <button onClick={props.onHideCart} className={classes["button--alt"]}>
-          Close
-        </button>
-        {hasItem && (
-          <button className={classes.button} onClick={showCheckoutHandler}>
-            Order
-          </button>
-        )}
-      </div>
+      {!checkoutIsShown && modalAction}
     </Modal>
   );
 };

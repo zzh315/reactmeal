@@ -22,15 +22,13 @@ const useInput = (validate) => {
     // }
   };
 
-  const valueFormClassName = hasError ? "form-control invalid" : "form-control";
-
   return {
     value: enteredValue,
     isTouched,
     onBlurHandler,
     onChangeHandler,
     hasError,
-    valueFormClassName,
+    isInvalidInput,
   };
 };
 
