@@ -28,8 +28,9 @@ const cartReducer = (state, action) => {
       updatedItems[existingCartItemIndex] = updatedItem;
     } else {
       updatedItems = state.items.concat(action.item);
+      //The concat() method is used to merge two or more arrays.
+      //This method does not change the existing arrays, but instead returns a new array.
     }
-
     return { items: updatedItems, totalAmount: updatedTotalAmount };
   }
   if (action.type === "REMOVE") {
