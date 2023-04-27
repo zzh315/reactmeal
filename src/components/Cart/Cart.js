@@ -7,6 +7,7 @@ import Checkout from "../Checkout/Checkout";
 
 const Cart = (props) => {
   const cartCtx = useContext(CartContext);
+
   const [checkoutIsShown, setCheckoutIsShown] = useState(false);
 
   const totalAmount = `$${Math.abs(cartCtx.totalAmount.toFixed(2))}`;
@@ -73,7 +74,12 @@ const Cart = (props) => {
         <span>Total Amount</span>
         <span>{totalAmount}</span>
       </div>
-      {checkoutIsShown && <Checkout onHideCheckout={hideCheckoutHandler} />}
+      {checkoutIsShown && (
+        <Checkout
+          onHideCheckout={hideCheckoutHandler}
+          cartItems={cartCtx.items}
+        />
+      )}
       {!checkoutIsShown && modalAction}
     </Modal>
   );
