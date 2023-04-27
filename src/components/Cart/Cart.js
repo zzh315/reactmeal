@@ -6,6 +6,8 @@ import CartItem from "./CartItem";
 import Checkout from "../Checkout/Checkout";
 
 const Cart = (props) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [submitId, setSubmitId] = useState(null);
   const cartCtx = useContext(CartContext);
 
   const [checkoutIsShown, setCheckoutIsShown] = useState(false);
@@ -67,8 +69,14 @@ const Cart = (props) => {
     </div>
   );
 
-  return (
-    <Modal onClick={props.onHideCart}>
+  const grabSubmitHandler = (loadStatus, id) => {
+    setIsLoading(loadStatus);
+    setSubmitId(id);
+    console.log("cart", loadStatus);
+  };
+
+  const cartJSX = (
+    <React.Fragment>
       {cartItems}
       <div className={classes.total}>
         <span>Total Amount</span>
@@ -78,9 +86,18 @@ const Cart = (props) => {
         <Checkout
           onHideCheckout={hideCheckoutHandler}
           cartItems={cartCtx.items}
+          onGrab={grabSubmitHandler}
         />
       )}
       {!checkoutIsShown && modalAction}
+    </React.Fragment>
+  );
+
+  return (
+    <Modal onClick={props.onHideCart}>
+      {!isLoading && !submitId && cartJSX}
+      {isLoading && <p>Loading...</p>}
+      {submitId && <p>Order Success! Order ID: {submitId}</p>}
     </Modal>
   );
 };

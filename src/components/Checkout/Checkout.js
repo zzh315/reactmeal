@@ -1,15 +1,20 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useContext } from "react";
+import CartContext from "../../store/cart-context";
 
 import useInput from "../../hooks/use-input";
 import classes from "./Checkout.module.css";
 
 const Checkout = (props) => {
   const [error, setError] = useState(null);
-  const [id, setId] = useState(null);
+  const cartCtx = useContext(CartContext);
+
+  let id;
+  let isLoading;
+  console.log("before try", isLoading);
 
   const fetchPOST = async (orderData) => {
     setError(null);
-    setId(null);
+
     try {
       const response = await fetch(
         "https://react-movie-cbd13-default-rtdb.asia-southeast1.firebasedatabase.app/orders.json",
@@ -25,14 +30,18 @@ const Checkout = (props) => {
       if (!response.ok) {
         throw new Error("Request failed!");
       }
-
+      isLoading = false;
       const data = await response.json();
 
-      setId(data.name);
+      id = data.name;
+      console.log("in try", isLoading);
     } catch (err) {
       setError(err.message || "Something went wrong!");
+      isLoading = false;
     }
   };
+
+  console.log("after try", isLoading);
 
   const nameInputRef = useRef();
   const emailInputRef = useRef();
@@ -97,6 +106,7 @@ const Checkout = (props) => {
     postalIsInvalid;
 
   let orderData;
+
   const formSubmitHandler = (event) => {
     event.preventDefault();
 
@@ -116,10 +126,15 @@ const Checkout = (props) => {
     };
 
     if (formIsInvalid) {
-      setError("for is not valid");
+      setError("form is not valid");
     }
 
-    fetchPOST(orderData);
+    fetchPOST(orderData).then(() => {
+      props.onGrab(isLoading, id);
+    });
+
+    cartCtx.clearCart();
+    console.log("submit handler", isLoading);
   };
 
   return (
@@ -233,7 +248,6 @@ const Checkout = (props) => {
         </button>
       </div>
       {error && <p>{error.message}</p>}
-      {id && <p>Your Order Id is {id}</p>}
     </form>
   );
 };
